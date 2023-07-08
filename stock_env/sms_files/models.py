@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String,DECIMAL,DateTime,func,ForeignKey
+from sqlalchemy import Column, Integer, String,DECIMAL,DateTime,func,ForeignKey,BigInteger
 from sqlalchemy.orm import relationship, backref
 from database import Base
 
@@ -12,8 +12,8 @@ class Product(Base):
     stockRel = relationship("Stock", backref="product",foreign_keys='Stock.Pid', cascade="all, delete")
     sorderRel = relationship("Sorder", backref="product",foreign_keys='Sorder.Pid', cascade="all, delete")
     corderRel = relationship("Corder", backref="product",foreign_keys='Corder.Pid', cascade="all, delete")
-    #
-    def _repr_(self):
+    
+    def repr(self):
         return f"<Product(Pid={self.Pid}, Pname='{self.Pname}', Description='{self.Description}',Price='{self.Price}')>"
     
 class Supplier(Base):
@@ -24,7 +24,7 @@ class Supplier(Base):
     Scontact= Column(Integer)
     Sadd= Column(String)
 
-    def _repr_(self):
+    def repr(self):
         return f"<Supplier(Sid={self.Sid}, Sname='{self.Sname}', Scontact='{self.Scontact}',Sadd='{self.Sadd}')>"
 
 class Customer(Base):
@@ -35,20 +35,20 @@ class Customer(Base):
     Ccontact= Column(Integer)
     Cadd= Column(String)
 
-    def _repr_(self):
+    def repr(self):
         return f"<Customer(Cid={self.Cid}, Cname='{self.Cname}', Ccontact='{self.Ccontact}',Cadd='{self.Cadd}')>"
 
 
 class Stock(Base):
     __tablename__ = "Stocks"
 
-    Stid = Column(Integer, primary_key=True)
+    Sid = Column(Integer, primary_key=True)
     Pid = Column(Integer, ForeignKey('Products.Pid',ondelete='CASCADE',onupdate='CASCADE'))
     Qnt = Column(Integer)
     
      
 
-    def _repr_(self):
+    def repr(self):
         return f"<Stock(Stid={self.Stid}, Pid='{self.Pid}', Qnt='{self.Qnt}')>"
     
 class Sorder(Base):
@@ -60,7 +60,7 @@ class Sorder(Base):
     Pqnt = Column(Integer)
     
 
-    def _repr_(self):
+    def repr(self):
         return f"<Sorder(Oid={self.Oid}, Pid='{self.Pid}', Sid='{self.Sid}',Pqnt='{self.Pqnt}')>"
 
 class Corder(Base):
@@ -72,7 +72,7 @@ class Corder(Base):
     Pqnt = Column(Integer)
     
 
-    def _repr_(self):
+    def repr(self):
         return f"<Corder(Oid={self.Oid}, Pid='{self.Pid}', Cid='{self.Cid}',Pqnt='{self.Pqnt}')>"
 
 
@@ -85,7 +85,7 @@ class Stransaction(Base):
     Tprice=Column(Integer)
     #product = relationship('Product', back_populates='Transaction')
   
-    def _repr_(self):
+    def repr(self):
         return f"<Stransaction(Tid={self.Tid}, Oid='{self.Oid}',TDate='{self.TDate}',Tprice='{self.Tprice})>"
     
 
@@ -98,5 +98,5 @@ class Ctransaction(Base):
     Tprice=Column(Integer)
     #product = relationship('Product', back_populates='Transaction')
   
-    def _repr_(self):
+    def repr(self):
         return f"<Ctransaction(Tid={self.Tid}, Oid='{self.Oid}',TDate='{self.TDate}',Tprice='{self.Tprice})>"

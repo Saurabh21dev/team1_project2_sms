@@ -1,4 +1,5 @@
 from database import db_session
+import re
 from models import Product,Stock,Supplier,Stransaction,Ctransaction,Corder,Sorder,Customer
 #product table
 class ProductDAO:
@@ -11,6 +12,18 @@ class ProductDAO:
 
     @staticmethod
     def create_product(Pname, Description, Price):
+        if any(arg is None for arg in [Pname, Description, Price]):
+            return None
+        
+        if not re.match(r'^[A-Za-z\s]+$', Pname):
+            return None
+        
+        if not re.match(r'^[A-Za-z\s]+$', Description):
+            return None
+        
+        if Price <= 0:
+            return None
+        
         product = Product(Pname=Pname,Description=Description,Price=Price)
         db_session.add(product)
         db_session.commit()
@@ -18,6 +31,18 @@ class ProductDAO:
 
     @staticmethod
     def update_product(Pid, Pname, Description, Price):
+        if any(arg is None for arg in [Pname, Description, Price]):
+            return None
+        
+        if not re.match(r'^[A-Za-z\s]+$', Pname):
+            return None
+        
+        if not re.match(r'^[A-Za-z\s]+$', Description):
+            return None
+        
+        if Price <= 0:
+            return None
+        
         product = db_session.query(Product).get(Pid)
         if product:
             product.Pname = Pname
@@ -112,8 +137,8 @@ class StockDAO:
         return db_session.query(Stock).all()
     
 
-    def get_stocks_by_id(Stid):
-        return db_session.query(Stock).filter(Stock.Stid == Stid).first()
+    def get_stock_by_id(Sid):
+        return db_session.query(Stock).filter(Stock.Sid == Sid).first()
 
     
 
@@ -125,24 +150,25 @@ class StockDAO:
         return stock
 
     @staticmethod
-    def update_stock(Stid, Pid, Qnt):
-        stock = db_session.query(Stock).get(Stid)
+    def update_stock(Sid, Pid, Qnt):
+        stock = db_session.query(Stock).get(Sid)
         if stock:
+            stock.Sid= Sid
             stock.Pid = Pid
             stock.Qnt = Qnt
             db_session.commit()
         return stock
 
     @staticmethod
-    def delete_stock(Stid):
-        stock = db_session.query(Stock).get(Stid)
+    def delete_stock(Sid):
+        stock = db_session.query(Stock).get(Sid)
         if stock:
             db_session.delete(stock)
             db_session.commit()
             return True
         return False
     
-#StockOrder table
+#Stock Order table
 class SorderDAO:
     @staticmethod
     def get_all_sorders():

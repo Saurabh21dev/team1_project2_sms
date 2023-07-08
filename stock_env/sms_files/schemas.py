@@ -28,7 +28,7 @@ class CustomerType:
 
 @strawberry.type
 class StockType:
-    Stid:int
+    Sid:int
     Pid: int
     Qnt: int
     
@@ -94,8 +94,8 @@ try:
             return StockDAO.get_all_stocks()
         
         @strawberry.field
-        def getStockById(self,Stid:int) -> StockType:
-            return StockDAO.get_stocks_by_id(Stid)
+        def getStockById(self,Sid:int) -> StockType:
+            return StockDAO.get_stock_by_id(Sid)
         
         @strawberry.field
         def getCOrders(self) -> List[CorderType]:
@@ -162,12 +162,12 @@ class Mutation:
         return StockDAO.create_stock(Pid, Qnt)
     
     @strawberry.mutation
-    def updateStock(self,Stid:int, Pid: int, Qnt: int) -> StockType:
-        return StockDAO.update_stock(Stid,Pid, Qnt)
+    def updateStock(self,Sid:int, Pid: int, Qnt: int) -> StockType:
+        return StockDAO.update_stock(Sid,Pid, Qnt)
     
     @strawberry.mutation
-    def deleteStock(self, Stid: int) -> bool:
-        success = StockDAO.delete_stock(Stid)
+    def deleteStock(self, Sid: int) -> bool:
+        success = StockDAO.delete_stock(Sid)
         return success
     
     #SOrders table 
